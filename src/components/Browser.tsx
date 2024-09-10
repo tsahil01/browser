@@ -17,6 +17,14 @@ import { Separator } from "@/components/ui/separator";
 import { useRecoilState } from "recoil";
 import { tabsAtom } from "@/app/atom/tabsAtom";
 import { activeTabAtom } from "@/app/atom/activeTabAtom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 export default function Browser() {
   const [tabs, setTabs] = useRecoilState(tabsAtom);
@@ -132,9 +140,7 @@ export default function Browser() {
             );
           }}
         />
-        <Button variant="ghost" size="icon" className="hidden md:block">
-          <Settings className="h-4 w-4" />
-        </Button>
+        <SettingsBtn />
       </div>
 
       <div className="flex-grow md:px-3 md:py-2 p-1">
@@ -148,7 +154,7 @@ export default function Browser() {
       </div>
 
       <div className="flex flex-row gap-2 px-2 mb-2 p-1 justify-between border-t md:hidden">
-        <div className="flex flex-row gap-2 justify-between w-full">
+        <div className="flex flex-row gap-2 justify-between w-full px-6">
           <Button variant="ghost" size="icon">
             <ArrowLeft className="h-4 w-4" />
           </Button>
@@ -161,11 +167,30 @@ export default function Browser() {
           <Button variant="ghost" size="icon" onClick={toggleTabBar}>
             <Tablet className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon">
-            <Settings className="h-4 w-4" />
-          </Button>
+          <SettingsBtn />
         </div>
       </div>
     </div>
+  );
+}
+
+function SettingsBtn() {
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <Button variant="ghost" size="icon" className="">
+            <Settings className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>User 1</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>Dark Mode</DropdownMenuItem>
+          <DropdownMenuItem>Incognito Mode</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
