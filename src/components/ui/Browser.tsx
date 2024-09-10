@@ -13,14 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { useRecoilState } from "recoil";
+import { tabsAtom } from "@/app/atom/tabsAtom";
+import { activeTabAtom } from "@/app/atom/activeTabAtom";
 
 export default function Component() {
-  const [tabs, setTabs] = useState([
-    { id: 1, title: "Home", url: "/" },
-    { id: 2, title: "About", url: "/about" },
-    { id: 3, title: "Contact", url: "/contact" },
-  ]);
-  const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [tabs, setTabs] = useRecoilState(tabsAtom);
+  const [activeTab, setActiveTab] = useRecoilState(activeTabAtom);
   const [nextId, setNextId] = useState(4);
 
   const handleNewTab = () => {
@@ -83,8 +82,8 @@ export default function Component() {
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        <div className="bg-gradient-to-r from-white via-blue-400 to-blue-600 text-black flex flex-row justify-between items-center rounded-xl shadow-lg px-4 mx-4 my-auto hover:shadow-2xl transition-shadow duration-300 ease-in-out">
-          <h1 className="text-xl font-extrabold text-gray-800">
+        <div className="bg-gradient-to-l from-purple-600 to-blue-600 text-white flex flex-row justify-between items-center rounded-xl shadow-lg px-4 mx-4 my-auto hover:shadow-2xl transition-shadow duration-300 ease-in-out">
+          <h1 className="text-xl font-bold">
             Modern Browser
           </h1>
         </div>
@@ -104,7 +103,18 @@ export default function Component() {
           className="flex-grow"
           placeholder="Enter URL or search..."
           value={activeTab.url}
-          onChange={(e) => setActiveTab({ ...activeTab, url: e.target.value })}
+          onChange={(e) => {
+            setActiveTab({ ...activeTab, url: e.target.value });
+            setTabs(tabs.map((tab) => {
+              if (tab.id === activeTab.id) {
+                const newTitle = (e.target.value).replace('/', "");
+                const capitalizedTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
+                return { ...tab, url: e.target.value, title: capitalizedTitle };
+              }
+              return tab;
+            }));            
+
+          }}
         />
         <Button variant="ghost" size="icon" className="hidden md:block">
           <Settings className="h-4 w-4" />
