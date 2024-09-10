@@ -8,6 +8,7 @@ import {
   ArrowRight,
   RotateCw,
   Settings,
+  Tablet,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,10 +18,11 @@ import { useRecoilState } from "recoil";
 import { tabsAtom } from "@/app/atom/tabsAtom";
 import { activeTabAtom } from "@/app/atom/activeTabAtom";
 
-export default function Component() {
+export default function Browser() {
   const [tabs, setTabs] = useRecoilState(tabsAtom);
   const [activeTab, setActiveTab] = useRecoilState(activeTabAtom);
   const [nextId, setNextId] = useState(4);
+  const [isTabBarVisible, setIsTabBarVisible] = useState(false);
 
   const handleNewTab = () => {
     const newTab = {
@@ -43,9 +45,19 @@ export default function Component() {
     }
   };
 
+  const toggleTabBar = () => {
+    setIsTabBarVisible(!isTabBarVisible);
+  };
+
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex-row gap-2 hidden md:flex justify-between">
+    <div className="flex flex-col h-screen mb-2">
+      <div
+        className={`flex-row gap-2 md:flex justify-between transition-all duration-300 ease-in-out ${
+          isTabBarVisible
+            ? "max-h-20 opacity-100"
+            : "max-h-0 opacity-0 overflow-hidden"
+        } md:max-h-none md:opacity-100`}
+      >
         <div className="flex flex-row p-2 gap-2">
           <ScrollArea className="w-auto">
             <div className="flex space-x-2">
@@ -82,10 +94,8 @@ export default function Component() {
             <Plus className="h-4 w-4" />
           </Button>
         </div>
-        <div className="bg-gradient-to-l from-purple-600 to-blue-600 text-white flex flex-row justify-between items-center rounded-xl shadow-lg px-4 mx-4 my-auto hover:shadow-2xl transition-shadow duration-300 ease-in-out">
-          <h1 className="text-xl font-bold">
-            Modern Browser
-          </h1>
+        <div className="bg-gradient-to-l from-purple-600 to-blue-600 text-white flex flex-row justify-between items-center rounded-xl shadow-lg px-4 mx-4 my-auto hover:shadow-2xl transition-shadow duration-300 ease-in-out hidden md:flex">
+          <h1 className="text-xl font-bold">Modern Browser</h1>
         </div>
       </div>
 
@@ -105,15 +115,21 @@ export default function Component() {
           value={activeTab.url}
           onChange={(e) => {
             setActiveTab({ ...activeTab, url: e.target.value });
-            setTabs(tabs.map((tab) => {
-              if (tab.id === activeTab.id) {
-                const newTitle = (e.target.value).replace('/', "");
-                const capitalizedTitle = newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
-                return { ...tab, url: e.target.value, title: capitalizedTitle };
-              }
-              return tab;
-            }));            
-
+            setTabs(
+              tabs.map((tab) => {
+                if (tab.id === activeTab.id) {
+                  const newTitle = e.target.value.replace("/", "");
+                  const capitalizedTitle =
+                    newTitle.charAt(0).toUpperCase() + newTitle.slice(1);
+                  return {
+                    ...tab,
+                    url: e.target.value,
+                    title: capitalizedTitle,
+                  };
+                }
+                return tab;
+              })
+            );
           }}
         />
         <Button variant="ghost" size="icon" className="hidden md:block">
@@ -130,7 +146,26 @@ export default function Component() {
           />
         </div>
       </div>
+
+      <div className="flex flex-row gap-2 px-2 mb-2 p-1 justify-between border-t md:hidden">
+        <div className="flex flex-row gap-2 justify-between w-full">
+          <Button variant="ghost" size="icon">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <RotateCw className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={toggleTabBar}>
+            <Tablet className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon">
+            <Settings className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
-

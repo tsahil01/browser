@@ -1,9 +1,9 @@
-import Browser from "@/components/ui/Browser";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
+import Browser from "@/components/Browser";
 
 export default function Home() {
-  return <>
-  <Browser/>
-  </>;
+  return (
+    <>
+      <Browser />
+    </>
+  );
 }

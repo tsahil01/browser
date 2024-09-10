@@ -4,7 +4,7 @@ import { ExternalLink, Sparkle } from "lucide-react";
 export default function Home() {
   return (
     <>
-      <div className="h-screen flex flex-col gap-5 w-full items-center justify-center bg-gradient-to-l from-purple-600 to-blue-900">
+      <div className="h-screen flex flex-col gap-5 w-full items-center justify-center bg-gradient-to-t from-purple-600 to-blue-900">
         <div className="text-center flex flex-col gap-3">
           <Sparkle className="m-auto text-yellow-400 w-16 h-16" />
           <h1 className="md:text-5xl text-3xl font-bold text-white">
